@@ -92,6 +92,20 @@ endif ()
 
 add_subdirectory (src)
 
+if(UNIX)
+    include(FindPkgConfig QUIET)
+    if(PKG_CONFIG_FOUND)
+        set(PACKAGE_VERSION "${Epoxy_VERSION}")
+        set(prefix          "${CMAKE_INSTALL_PREFIX}")
+        set(exec_prefix     "${prefix}/bin")
+        set(libdir          "${prefix}/lib")
+        set(includedir      "${prefix}/include")
+        configure_file("epoxy.pc.in" "epoxy.pc" @ONLY)
+        install(FILES       "${CMAKE_CURRENT_BINARY_DIR}/epoxy.pc"
+                DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
+    endif()
+endif()
+
 if (EPOXY_BUILD_TESTS)
     enable_testing ()
     add_subdirectory (test)
